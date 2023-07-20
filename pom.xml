@@ -18,9 +18,15 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<java.version>11</java.version>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+
+	<modules>
+		<module>stats-service</module>
+		<module>main-service</module>
+    </modules>
 
 	<build>
 		<pluginManagement>
@@ -39,7 +45,7 @@
 					<artifactId>maven-checkstyle-plugin</artifactId>
 					<version>3.1.2</version>
 					<configuration>
-						<configLocation>checkstyle.xml</configLocation>
+						<configLocation>../../Downloads/java-explore-with-me-stat_svc 2/checkstyle.xml</configLocation>
 						<failOnViolation>true</failOnViolation>
 						<logViolationsToConsole>true</logViolationsToConsole>
 						<includeTestSourceDirectory>true</includeTestSourceDirectory>
