@@ -1,14 +1,17 @@
 package ru.practicum.server.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@ToString
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-@Builder
 @Entity
 @Table(name = "hit")
 public class Hit {
@@ -28,4 +31,15 @@ public class Hit {
     @Column
     private LocalDateTime timestamp;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Hit)) return false;
+        return id != null && id.equals(((Hit) o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

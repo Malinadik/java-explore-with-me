@@ -1,18 +1,20 @@
 package ru.practicum.server.model;
 
+import lombok.experimental.UtilityClass;
 import ru.practicum.dto.HitDto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@UtilityClass
 public class HitMapper {
 
-    public static HitDto toDto(Hit hit) {
+    public HitDto toDto(Hit hit) {
         return HitDto.builder().app(hit.getApp())
                 .uri(hit.getUri()).ip(hit.getIp()).timestamp(hit.getTimestamp().toString()).build();
     }
 
-    public static Hit fromDto(HitDto hitDto) {
+    public Hit fromDto(HitDto hitDto) {
         Hit hit = Hit.builder().app(hitDto.getApp())
                 .uri(hitDto.getUri()).ip(hitDto.getIp()).build();
         LocalDateTime dateTime =
