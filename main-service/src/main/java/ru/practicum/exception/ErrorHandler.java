@@ -6,9 +6,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.validation.ConstraintViolationException;
-import javax.validation.ValidationException;
-
 @RestControllerAdvice
 public class ErrorHandler {
     @ExceptionHandler
@@ -40,40 +37,4 @@ public class ErrorHandler {
     public ErrorResponse conflictException(final ConflictException e) {
         return new ErrorResponse("Conflict error", e.getMessage());
     }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleWrongState(final NotSupportedStateException e) {
-        return new ErrorResponse(e.getMessage(), e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse allExceptions(final ValidationException e) {
-        return new ErrorResponse(e.getMessage(), e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse allExceptions(final MethodArgumentNotValidException e) {
-        return new ErrorResponse(e.getMessage(), e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse allExceptions(final ConstraintViolationException e) {
-        return new ErrorResponse(e.getMessage(), e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse allExceptions(final IllegalArgumentException e) {
-        return new ErrorResponse(e.getMessage(), e.getMessage());
-    }
-
-    /*@ExceptionHandler
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse allExceptions(final Exception e) {
-        return new ErrorResponse(e.getMessage(), e.getMessage());
-    }*/
 }
