@@ -3,6 +3,7 @@ package ru.practicum.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.CompilationDto;
 import ru.practicum.dto.CompilationEntryDto;
 import ru.practicum.dto.CompilationUpdDto;
@@ -22,11 +23,13 @@ import static ru.practicum.mapper.CompilationMapper.toCompDto;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CompilationService {
     private final CompilationRepository repository;
     private final EventRepository eventRepository;
     private final EventService eventService;
 
+    @Transactional
     public CompilationDto addCompilation(CompilationEntryDto entryDto) {
         checkTitle(entryDto.getTitle());
         Compilation compilation = Compilation.builder().events(new ArrayList<>())
@@ -40,6 +43,7 @@ public class CompilationService {
         return toCompDto(repository.save(compilation));
     }
 
+    @Transactional
     public CompilationDto updateCompilation(Long compId, CompilationUpdDto updDto) {
         checkTitle(updDto.getTitle());
         Compilation compilation = repository.findById(compId).orElseThrow(() -> new NotFoundException("Compil not found!"));
@@ -69,6 +73,7 @@ public class CompilationService {
         return repository.findAll(pageable).stream().map(CompilationMapper::toCompDto).collect(Collectors.toList());
     }
 
+    @Transactional
     public void deleteCompilation(Long compId) {
         if (!repository.existsById(compId)) {
             throw new NotFoundException("Such comp not found!");

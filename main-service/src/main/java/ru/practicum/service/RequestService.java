@@ -2,6 +2,7 @@ package ru.practicum.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.ParticipationRequestDto;
 import ru.practicum.dto.RequestStatusUpdate;
 import ru.practicum.dto.RequestStatusUpdateResult;
@@ -23,11 +24,13 @@ import static ru.practicum.mapper.RequestMapper.toRequestDto;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class RequestService {
     private final RequestRepository repository;
     private final EventRepository events;
     private final UserRepository users;
 
+    @Transactional
     public ParticipationRequestDto addRequest(Long userId, Long eventId) {
         User user = users.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found!"));
@@ -45,6 +48,7 @@ public class RequestService {
         return toRequestDto(repository.save(request));
     }
 
+    @Transactional
     public RequestStatusUpdateResult confirmRequest(Long userId, Long eventId, RequestStatusUpdate statusUpdate) {
         checkUser(userId);
         Event event = events.findById(eventId).orElseThrow(() -> new NotFoundException("Event not found!"));

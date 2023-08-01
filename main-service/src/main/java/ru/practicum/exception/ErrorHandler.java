@@ -44,4 +44,9 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage(), e.getMessage());
     }
 
+    /*@ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse allExceptions(final Exception e) {
+        return new ErrorResponse(e.getMessage(), e.getMessage());
+    }*/
 }

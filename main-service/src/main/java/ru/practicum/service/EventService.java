@@ -2,6 +2,7 @@ package ru.practicum.service;
 
 
 
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.client.StatClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,7 @@ import static ru.practicum.mapper.EventMapper.toDto;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class EventService {
     private final EventRepository repository;
     private final UserRepository users;
@@ -50,6 +52,7 @@ public class EventService {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 
+    @Transactional
     public EventDto addEvent(Long userId, EventEntryDto entryDto) {
         Event event = fromEntry(entryDto);
         event.setCategory(categories.findById(entryDto.getCategory())
@@ -62,6 +65,7 @@ public class EventService {
         return toDto(repository.save(event));
     }
 
+    @Transactional
     public EventDto updateEventByOwner(Long userId, Long eventId, EventUserUpdateDto updateDto) {
         if (!users.existsById(userId)) {
             throw new NotFoundException("User not found!");
@@ -87,6 +91,7 @@ public class EventService {
         return toDto(repository.save(event));
     }
 
+    @Transactional
     public EventDto updateEventByAdmin(Long eventId, EventUserUpdateDto updateDto) {
         Event event = repository.findById(eventId).orElseThrow(() -> new NotFoundException("Cat not Found!"));
         if (!event.getState().equals(EventState.PENDING)) {
