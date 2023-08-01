@@ -1,7 +1,7 @@
 package ru.practicum.controller.pub;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
+import lombok.*;
 import ru.practicum.dto.Sort;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +10,11 @@ import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SearchEventParams {
     String text;
 
