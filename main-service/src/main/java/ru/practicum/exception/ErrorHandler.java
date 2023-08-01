@@ -5,6 +5,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
+
+import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
 
 @RestControllerAdvice
 public class ErrorHandler {
@@ -41,6 +45,30 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleWrongState(final NotSupportedStateException e) {
+        return new ErrorResponse(e.getMessage(), e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse allExceptions(final ValidationException e) {
+        return new ErrorResponse(e.getMessage(), e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse allExceptions(final MethodArgumentNotValidException e) {
+        return new ErrorResponse(e.getMessage(), e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse allExceptions(final ConstraintViolationException e) {
+        return new ErrorResponse(e.getMessage(), e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse allExceptions(final IllegalArgumentException e) {
         return new ErrorResponse(e.getMessage(), e.getMessage());
     }
 
