@@ -32,7 +32,7 @@ public class PrivateEventsController {
     }
 
     @GetMapping
-    public List<EventShortDto> getEventsByUser(@PathVariable Long userId, @RequestParam(defaultValue = "0", required = false) Integer from, @RequestParam(defaultValue = "10", required = false) Integer size) {
+    public List<EventShortDto> getEventsByUser(@PathVariable Long userId, @RequestParam(defaultValue = "0") Integer from, @RequestParam(defaultValue = "10") Integer size) {
         Pageable pageable = PageRequest.of(from / size, size);
         log.info("Запрос события пользователем " + userId);
         return eventService.getEventsByInitiator(userId, pageable);

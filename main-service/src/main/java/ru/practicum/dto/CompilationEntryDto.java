@@ -19,7 +19,6 @@ public class CompilationEntryDto {
 
     private Boolean pinned;
 
-    @NotNull
     @NotBlank
     @Size(min = 1, max = 50)
     private String title;

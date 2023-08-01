@@ -18,7 +18,7 @@ public class PublicCategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public List<Category> getCategories(@RequestParam(required = false, defaultValue = "0") Integer from, @RequestParam(required = false, defaultValue = "10") Integer size) {
+    public List<Category> getCategories(@RequestParam(defaultValue = "0") Integer from, @RequestParam(defaultValue = "10") Integer size) {
         log.info("Получение списка категорий публичное");
         Pageable pageable = PageRequest.of(from / size, size);
         return categoryService.getAllCategories(pageable);

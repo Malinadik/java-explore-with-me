@@ -15,7 +15,6 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @Builder
 public class UserEntryDto {
-    @NotNull
     @NotBlank
     @Size(min = 2, max = 250)
     private String name;
