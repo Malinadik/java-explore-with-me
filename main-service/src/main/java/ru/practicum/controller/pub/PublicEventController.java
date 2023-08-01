@@ -10,7 +10,6 @@ import ru.practicum.dto.Sort;
 import ru.practicum.service.EventService;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 
