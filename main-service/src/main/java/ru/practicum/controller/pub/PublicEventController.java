@@ -34,7 +34,7 @@ public class PublicEventController {
                                                          @RequestParam(required = false, defaultValue = "10") Integer size,
                                                          HttpServletRequest request) {
         log.info("Публичный запрос событий по фильтрам");
-        return eventService.publicGetEventsByFilters(SearchEventParams.builder()
+        /*return eventService.publicGetEventsByFilters(SearchEventParams.builder()
                 .text(text)
                 .categories(categories)
                 .paid(paid)
@@ -45,7 +45,8 @@ public class PublicEventController {
                 .from(from)
                 .size(size)
                 .request(request)
-                .build());
+                .build());*/
+        return eventService.publicGetEventsByFilters(text, categories, paid, onlyAvailable, rangeStart, rangeEnd, sort, from, size, request);
     }
 
     @GetMapping("/{id}")
