@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.practicum.client.StatClient;
+import ru.practicum.controller.pub.SearchEventParams;
 import ru.practicum.dto.*;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotAvailableException;
@@ -144,15 +145,8 @@ public class EventService {
         return toDto(event);
     }
 
-    public List<EventShortDto> publicGetEventsByFilters(String text,
-                                                        List<Long> categories,
-                                                        Boolean paid,
-                                                        Boolean onlyAvailable,
-                                                        LocalDateTime start,
-                                                        LocalDateTime end,
-                                                        Sort sort,
-                                                        Integer from, Integer size, HttpServletRequest request) {
-        checkDate(start, end);
+    public List<EventShortDto> publicGetEventsByFilters(SearchEventParams params) {
+        checkDate(params.getRangeStart(), params.getRangeEnd());
         List<Event> events;
         CriteriaBuilder builder = manager.getCriteriaBuilder();
         CriteriaQuery<Event> query = builder.createQuery(Event.class);
@@ -160,25 +154,25 @@ public class EventService {
         Predicate predicate = builder.conjunction();
         Order order = builder.asc(root);
         predicate = builder.and(predicate, root.get("state").in(EventState.PUBLISHED));
-        if (text != null && !text.isEmpty()) {
-            Predicate annotation = builder.like(builder.lower(root.get("annotation")), "%" + text.toLowerCase() + "%");
-            Predicate description = builder.like(builder.lower(root.get("description")), "%" + text.toLowerCase() + "%");
+        if (params.getText() != null && !params.getText().isEmpty()) {
+            Predicate annotation = builder.like(builder.lower(root.get("annotation")), "%" + params.getText().toLowerCase() + "%");
+            Predicate description = builder.like(builder.lower(root.get("description")), "%" + params.getText().toLowerCase() + "%");
             predicate = builder.and(predicate, builder.or(annotation, description));
         }
         if (categories != null) {
             predicate = builder.and(predicate, root.get("category").get("id").in(categories));
         }
-        if (paid != null) {
-            predicate = builder.and(predicate, builder.equal(root.get("paid"), paid));
+        if (params.getPaid() != null) {
+            predicate = builder.and(predicate, builder.equal(root.get("paid"), params.getPaid()));
         }
-        if (start != null) {
-            predicate = builder.and(predicate, builder.greaterThanOrEqualTo(root.get("eventDate").as(LocalDateTime.class), start));
+        if (params.getRangeStart() != null) {
+            predicate = builder.and(predicate, builder.greaterThanOrEqualTo(root.get("eventDate").as(LocalDateTime.class), params.getRangeStart()));
         }
-        if (end != null) {
-            predicate = builder.and(predicate, builder.lessThanOrEqualTo(root.get("eventDate").as(LocalDateTime.class), end));
+        if (params.getRangeEnd() != null) {
+            predicate = builder.and(predicate, builder.lessThanOrEqualTo(root.get("eventDate").as(LocalDateTime.class), params.getRangeEnd()));
         }
-        if (sort != null) {
-            switch (sort) {
+        if (params.getSort() != null) {
+            switch (params.getSort()) {
                 case EVENT_DATE:
                     order = builder.asc(root.get("eventDate"));
                     break;
@@ -190,16 +184,16 @@ public class EventService {
         }
         events = manager.createQuery(query.select(root)
                         .where(predicate).orderBy(order))
-                .setFirstResult(from)
-                .setMaxResults(size)
+                .setFirstResult(params.getFrom())
+                .setMaxResults(params.getSize())
                 .getResultList()
                 .stream()
                 .map(this::setConfRequests)
                 .collect(Collectors.toList());
         List<Long> ids = events.stream().map(Event::getId).collect(Collectors.toList());
-        sendHits(request, ids);
+        sendHits(params.getRequest(), ids);
         System.out.println(ids);
-        if (onlyAvailable) {
+        if (params.getOnlyAvailable()) {
             return events.stream()
                     .filter(event -> event.getConfirmedRequests() < event.getParticipantLimit())
                     .map(this::setViews)

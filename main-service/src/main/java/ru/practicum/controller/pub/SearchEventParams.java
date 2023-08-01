@@ -1,8 +1,7 @@
 package ru.practicum.controller.pub;
 
-//import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 import ru.practicum.dto.Sort;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,10 +22,10 @@ public class SearchEventParams {
 
     Boolean paid;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime rangeStart;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime rangeEnd;
 
     Boolean onlyAvailable;
