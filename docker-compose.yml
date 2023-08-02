@@ -23,3 +23,28 @@ services:
       - POSTGRES_DB=statsdb
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=root
+
+  main-service:
+    build: ./main-service/
+    image: main_service_image
+    container_name: main-service
+    depends_on:
+      - main-db
+      - stats-server
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://main-db:5432/maindb
+      - STAT_SERVER_URL=http://stats-server:9090
+
+  main-db:
+    image: postgres:14-alpine
+    container_name: maindb
+    volumes:
+      - /var/lib/postgresql/data/
+    ports:
+      - "6451:5432"
+    environment:
+      - POSTGRES_DB=maindb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
