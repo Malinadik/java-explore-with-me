@@ -53,3 +53,19 @@ CREATE TABLE IF NOT EXISTS request (
 	event_id int8 NULL REFERENCES event (id),
 	requester_id int8 NULL REFERENCES users (id)
 );
+
+CREATE TABLE IF NOT EXISTS comment (
+	id int8 GENERATED ALWAYS AS IDENTITY PRIMARY KEY UNIQUE,
+	text varchar(2000) NULL,
+	created timestamp,
+    updated timestamp,
+	event_id int8 NULL REFERENCES event (id),
+	user_id int8 NULL REFERENCES users (id)
+);
+
+CREATE TABLE IF NOT EXISTS comment_likes (
+    id int8 GENERATED ALWAYS AS IDENTITY PRIMARY KEY UNIQUE,
+    comment_id int8 REFERENCES comments (id) ON DELETE CASCADE,
+    user_id int8 REFERENCES users (id) ON DELETE CASCADE,
+    islike bool
+);
