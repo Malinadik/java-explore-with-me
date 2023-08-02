@@ -12,6 +12,12 @@ import javax.validation.ValidationException;
 public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleWrongState(final NotSupportedStateException e) {
+        return new ErrorResponse(e.getMessage(), e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse validationException(final ValidationException e) {
         return new ErrorResponse("Available error", e.getMessage());
     }
@@ -54,7 +60,7 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse allException(final Exception e) {
-        return new ErrorResponse("Exception", e.getMessage());
+    public ErrorResponse handleThrowable(final Throwable e) {
+        return new ErrorResponse("Internal Server error", e.getMessage());
     }
 }
