@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS request (
 	requester_id int8 NULL REFERENCES users (id)
 );
 
-CREATE TABLE IF NOT EXISTS comment (
+CREATE TABLE IF NOT EXISTS comments (
 	id int8 GENERATED ALWAYS AS IDENTITY PRIMARY KEY UNIQUE,
 	text varchar(2000) NULL,
 	created timestamp,
