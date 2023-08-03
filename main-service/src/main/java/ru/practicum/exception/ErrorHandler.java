@@ -6,16 +6,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.validation.ValidationException;
-
 @RestControllerAdvice
 public class ErrorHandler {
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse validationException(final ValidationException e) {
-        return new ErrorResponse("Available error", e.getMessage());
-    }
-
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(final NotFoundException e) {
@@ -25,7 +17,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse validationException(final MethodArgumentNotValidException e) {
-        return new ErrorResponse("MethodArgumentNotValidException", e.getMessage());
+        return new ErrorResponse("Validation error", e.getMessage());
     }
 
     @ExceptionHandler
@@ -48,7 +40,8 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse validationException(final NotSupportedStateException e) {
-        return new ErrorResponse("NotSupportedStateException", e.getMessage());
+    public ErrorResponse handleWrongState(final NotSupportedStateException e) {
+        return new ErrorResponse(e.getMessage(), e.getMessage());
     }
+
 }
